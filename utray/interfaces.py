@@ -1,0 +1,4 @@
+STATUS_INACTIVE = 'Inactive'
+STATUS_SYNCING = 'Syncing'
+STATUS_OK = 'Ok'
+STATUS_CONFLICT = 'Conflict'
