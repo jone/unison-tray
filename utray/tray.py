@@ -98,7 +98,7 @@ class TrayMenu(NSObject):
             self._menu_items['resolve'].setEnabled_(True)
 
     def sync_(self, notification):
-        app.get().sync()
+        app.get().sync(now=True)
 
     def resolve_(self, notification):
         app.get().sync(foreground=True)
