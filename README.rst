@@ -59,18 +59,7 @@ Start the tray icon from within the ``unison-tray`` directory with::
 Autostart
 =========
 
-There are several ways to automatically start the application on login by
-executing ``bin/utray``, documented in the
-`world wide web <http://stackoverflow.com/questions/6442364/running-script-upon-login-mac>`_.
-
-That's how you can make the application automatically start when you start your computer::
-
-    $ cd /Library/StartupItems
-    $ sudo mkdir utray
-    $ cd utray
-    $ sudo ln -s /PATH/TO/YOUR/INSTALLATION/bin/utray utray
-
-(The directory and the symlink within the directory need to have the same name!)
+Add the ``utray.app`` to your autostart apps in the Mac OS user configuration.
 
 
 License
