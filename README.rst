@@ -46,7 +46,7 @@ Start the tray icon from within the ``unison-tray`` directory with:
 
 ::
 
-    $ bin/tray
+    $ bin/utray
 
 
 License
