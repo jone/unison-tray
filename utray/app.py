@@ -11,12 +11,13 @@ from utray.watcher import setup_observer
 
 class Application(object):
 
-    def __init__(self):
+    def __init__(self, path_to_unison):
+        self.path_to_unison = path_to_unison
         self._status = interfaces.STATUS_INACTIVE
         app.set(self)
 
     def run(self):
-        self._syncer = Syncer()
+        self._syncer = Syncer(self.path_to_unison)
         self._syncer.start()
 
         app = NSApplication.sharedApplication()
@@ -46,5 +47,5 @@ class Application(object):
         self._syncer.stop()
 
 
-def run():
-    Application().run()
+def run(path_to_unison):
+    Application(path_to_unison).run()

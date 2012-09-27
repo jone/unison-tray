@@ -21,8 +21,9 @@ tell application "Terminal" to do script "%s" in window 1\'
 
 class Syncer(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, path_to_unison):
         super(Syncer, self).__init__()
+        self.path_to_unison = path_to_unison
         self._syncing = False
         self._running = True
         self._pending = NO_SYNC
@@ -70,9 +71,9 @@ class Syncer(threading.Thread):
             app.get().set_status(interfaces.STATUS_SYNCING)
 
         if foreground:
-            cmd = terminal_cmd_template % 'unison -auto'
+            cmd = terminal_cmd_template % '%s -auto' % self.path_to_unison
         else:
-            cmd = 'unison -batch'
+            cmd = '%s -batch' % self.path_to_unison
 
         try:
             self._finished(self._runcmd(cmd))
