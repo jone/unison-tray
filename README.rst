@@ -51,7 +51,7 @@ that it works with only executing ``$ unison`` without root arguments.
 You should create the initial copy before starting unison-tray, since unison
 asks questions.
 
-Start the tray icon from within the ``unison-tray`` directory with:
+Start the tray icon from within the ``unison-tray`` directory with::
 
     $ bin/utray
 
@@ -63,7 +63,7 @@ There are several ways to automatically start the application on login by
 executing ``bin/utray``, documented in the
 `world wide web <http://stackoverflow.com/questions/6442364/running-script-upon-login-mac>`_.
 
-That's how you can make the application automatically start when you start your computer:
+That's how you can make the application automatically start when you start your computer::
 
     $ cd /Library/StartupItems
     $ sudo mkdir utray
