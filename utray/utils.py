@@ -5,6 +5,24 @@ import os
 icons_dir = os.path.join(os.path.dirname(__file__), 'icons')
 
 
+class AppRegistry(object):
+
+    def __init__(self):
+        self._app = None
+
+    def get(self):
+        if self._app is None:
+            raise RuntimeError('No app registered yet.')
+        return self._app
+
+    def set(self, app):
+        if self._app is not None:
+            raise RuntimeError('App already registered.')
+        self._app = app
+
+app = AppRegistry()
+
+
 def create_icon(name):
     path = os.path.join(icons_dir, name)
     return NSImage.alloc().initByReferencingFile_(path)
@@ -18,7 +36,6 @@ def get_root_path():
 
     for line in roots:
         _, path = line.split('=', 1)
-        print (_, path)
         path = path.strip()
         if '://' not in path:
             return os.path.abspath(path)

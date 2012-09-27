@@ -9,6 +9,7 @@ from AppKit import NSTimer
 from AppKit import NSVariableStatusItemLength
 from utray import interfaces
 from utray.utils import create_icon
+from utray.utils import app
 
 
 start_time = NSDate.date()
@@ -33,16 +34,17 @@ class TrayMenu(NSObject):
     def applicationDidFinishLaunching_(self, notification):
         self._menu_items = {}
 
-        self._status = interfaces.STATUS_INACTIVE
-
         self.statusbar = NSStatusBar.systemStatusBar()
         self._create_statusitem()
         self._create_menu()
         self._create_timer()
-        self.set_status(interfaces.STATUS_INACTIVE)
 
         self._syncing_icon_timer = None
         self._last_icon = None
+
+        # sync on boot
+        self.change_icon('inactive')
+        app.get().sync(now=True)
 
     def _create_statusitem(self):
         self.trayicon = self.statusbar.statusItemWithLength_(
@@ -83,44 +85,30 @@ class TrayMenu(NSObject):
         NSRunLoop.currentRunLoop().addTimer_forMode_(timer, NSDefaultRunLoopMode)
         timer.fire()
 
-    def set_status(self, status):
-        self._status = status
+    def status_changed(self, status):
         self._menu_items['status'].setTitle_('Status: %s' % status)
 
         self.change_icon(STATUS_ICON_MAP[status])
 
-    @property
-    def status(self):
-        self.status
+        if status == interfaces.STATUS_SYNCING:
+            self._menu_items['sync'].setEnabled_(False)
+            self._menu_items['resolve'].setEnabled_(False)
+        else:
+            self._menu_items['sync'].setEnabled_(True)
+            self._menu_items['resolve'].setEnabled_(True)
 
     def sync_(self, notification):
-        # XXX
-        self._menu_items['sync'].setEnabled_(False)
-        self.set_status(interfaces.STATUS_SYNCING)
+        app.get().sync()
 
     def resolve_(self, notification):
-        pass
+        app.get().sync(foreground=True)
 
     def tick_(self, notification):
         pass  # idle
 
-    def syncing(self, is_syncing):
-        has_conflicts = False
-
-        for action, context in self.action_context_map.items():
-            action.setTitle_(context.get_menu_title())
-            action.setEnabled_(not is_syncing)
-            if not is_syncing and context.status == STATUS_CONFLICT:
-                has_conflicts = True
-
-        self._menu_items['sync'].setEnabled_(not is_syncing)
-
-        if has_conflicts:
-            self.change_icon('conflict')
-        elif is_syncing:
-            self.change_icon('syncing')
-        else:
-            self.change_icon('idle')
+    def terminate_(self, notification):
+        app.get().quit()
+        super(TrayMenu, self).terminate_()
 
     def change_icon(self, name):
         if name == 'syncing':
