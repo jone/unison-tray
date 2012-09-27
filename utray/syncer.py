@@ -1,7 +1,6 @@
 from utray import interfaces
 from utray.utils import app
-import shlex
-import subprocess
+import os
 import threading
 import time
 
@@ -90,6 +89,4 @@ class Syncer(threading.Thread):
             app.get().set_status(interfaces.STATUS_CONFLICT)
 
     def _runcmd(self, cmd):
-        proc = subprocess.Popen(shlex.split(cmd))
-        proc.communicate()
-        return proc.poll()
+        return os.system(cmd)
