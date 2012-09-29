@@ -1,6 +1,7 @@
 from AppKit import NSApplication
 from PyObjCTools import AppHelper
 from utray import interfaces
+from utray.cron import setup_syncing_cronjobs
 from utray.syncer import Syncer
 from utray.tray import TrayMenu
 from utray.utils import app
@@ -29,6 +30,7 @@ class Application(object):
         app.setDelegate_(self.traymenu)
 
         setup_observer(self)
+        setup_syncing_cronjobs()
 
         AppHelper.runEventLoop()
 

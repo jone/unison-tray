@@ -16,6 +16,7 @@ setup(name='utray',
       install_requires=[
         'setuptools',
         'watchdog',
+        'croniter',
         ],
 
       entry_points = {
