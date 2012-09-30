@@ -24,6 +24,7 @@ ICONS =  {'inactive': create_icon('inactive.png'),
 
 STATUS_ICON_MAP = {
     interfaces.STATUS_INACTIVE: 'inactive',
+    interfaces.STATUS_DISABLED: 'inactive',
     interfaces.STATUS_SYNCING: 'syncing',
     interfaces.STATUS_OK: 'idle',
     interfaces.STATUS_CONFLICT: 'conflict'}
@@ -64,6 +65,7 @@ class TrayMenu(NSObject):
 
         menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
             'Sync now', 'sync:', '')
+        menuitem.setEnabled_(False)
         self._menu_items['sync'] = menuitem
         self.menu.addItem_(menuitem)
 
@@ -71,6 +73,12 @@ class TrayMenu(NSObject):
             'Resolve conflicts', 'resolve:', '')
         menuitem.setEnabled_(False)
         self._menu_items['resolve'] = menuitem
+        self.menu.addItem_(menuitem)
+
+        menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
+            app.get().status == interfaces.STATUS_DISABLED and 'Enable' or 'Disable',
+            'enabledisable:', '')
+        self._menu_items['enable_disable'] = menuitem
         self.menu.addItem_(menuitem)
 
         menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
@@ -93,9 +101,17 @@ class TrayMenu(NSObject):
         if status == interfaces.STATUS_SYNCING:
             self._menu_items['sync'].setEnabled_(False)
             self._menu_items['resolve'].setEnabled_(False)
+        elif status == interfaces.STATUS_DISABLED:
+            self._menu_items['sync'].setEnabled_(False)
+            self._menu_items['resolve'].setEnabled_(False)
         else:
             self._menu_items['sync'].setEnabled_(True)
             self._menu_items['resolve'].setEnabled_(True)
+
+        if status == interfaces.STATUS_DISABLED:
+            self._menu_items['enable_disable'].setTitle_('Enable')
+        else:
+            self._menu_items['enable_disable'].setTitle_('Disable')
 
     def sync_(self, notification):
         app.get().sync(now=True)
@@ -103,12 +119,19 @@ class TrayMenu(NSObject):
     def resolve_(self, notification):
         app.get().sync(foreground=True)
 
-    def tick_(self, notification):
-        pass  # idle
+    def enabledisable_(self, notification):
+        if app.get().status == interfaces.STATUS_DISABLED:
+            app.get().set_status(interfaces.STATUS_INACTIVE)
+            app.get().sync(now=True)
+        else:
+            app.get().set_status(interfaces.STATUS_DISABLED)
 
     def terminate_(self, notification):
         app.get().quit()
         super(TrayMenu, self).terminate_()
+
+    def tick_(self, notification):
+        pass  # idle
 
     def change_icon(self, name):
         if name == 'syncing':

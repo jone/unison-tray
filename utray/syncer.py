@@ -67,6 +67,11 @@ class Syncer(threading.Thread):
         if app.get().status is interfaces.STATUS_SYNCING:
             print 'Syncer quit: already syncing'
             return
+
+        elif app.get().status is interfaces.STATUS_DISABLED:
+            print 'Syncer quit: app is disabled'
+            return
+
         else:
             app.get().set_status(interfaces.STATUS_SYNCING)
 
