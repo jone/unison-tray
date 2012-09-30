@@ -89,7 +89,7 @@ class TrayMenu(NSObject):
     def _create_timer(self):
         timer = NSTimer.alloc() \
             .initWithFireDate_interval_target_selector_userInfo_repeats_(
-            start_time, 5.0, self, 'tick:', None, True)
+            start_time, 1, self, 'tick:', None, True)
         NSRunLoop.currentRunLoop().addTimer_forMode_(timer, NSDefaultRunLoopMode)
         timer.fire()
 
@@ -131,7 +131,11 @@ class TrayMenu(NSObject):
         super(TrayMenu, self).terminate_()
 
     def tick_(self, notification):
-        pass  # idle
+        last_status = getattr(self, '_last_status', None)
+        current_status = app.get().status
+        if last_status != current_status:
+            self.status_changed(current_status)
+            self._last_status = current_status
 
     def change_icon(self, name):
         if name == 'syncing':

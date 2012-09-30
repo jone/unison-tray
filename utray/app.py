@@ -54,7 +54,6 @@ class Application(object):
             self._persist_disabled(status == interfaces.STATUS_DISABLED)
 
         self._status = status
-        self.traymenu.status_changed(status)
 
     def sync(self, foreground=False, now=False):
         if self.status == interfaces.STATUS_DISABLED:
