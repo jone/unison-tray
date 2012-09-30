@@ -12,6 +12,7 @@ Features
 - Drop down menu, allowing to sync in background or in foreground (Terminal app).
 - Detects file system changes with local root (read from `~/.unison/default.prf`) and
   automatically syncs (delayed).
+- Syncs periodically, configurable in ``syncer.cfg`` (default every 5 minutes).
 - Syncs on application start.
 - It just calls ``unison -batch`` (background) or ``unison -auto`` (foreground for
   conflict resolution). It does not configure unison in any other way.
