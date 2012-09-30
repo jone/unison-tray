@@ -22,3 +22,4 @@ def setup_observer(app):
     observer = Observer()
     observer.schedule(Handler(app), path=get_root_path(), recursive=True)
     observer.start()
+    return observer

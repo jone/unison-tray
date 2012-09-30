@@ -8,7 +8,12 @@ from utray.utils import app
 from utray.utils import create_icon
 from utray.watcher import setup_observer
 import os.path
+import signal
 
+
+def sigint_handler(signum, frame):
+    app.get().quit()
+    signal.signal(signal.SIGINT, signal.default_int_handler)
 
 
 class Application(object):
@@ -34,8 +39,8 @@ class Application(object):
         self.traymenu.init()
         app.setDelegate_(self.traymenu)
 
-        setup_observer(self)
-        setup_syncing_cronjobs()
+        self._observer = setup_observer(self)
+        self._cron = setup_syncing_cronjobs()
 
         AppHelper.runEventLoop()
 
@@ -60,7 +65,11 @@ class Application(object):
             return True
 
     def quit(self):
+        AppHelper.stopEventLoop()
         self._syncer.stop()
+        self._observer.stop()
+        for thread in self._cron:
+            thread.stop()
 
     def _persist_disabled(self, disabled):
         path = os.path.join(os.getcwd(), 'var', 'disabled')
@@ -77,4 +86,5 @@ class Application(object):
         return data == 'true'
 
 def run(path_to_unison):
+    signal.signal(signal.SIGINT, sigint_handler)
     Application(path_to_unison).run()

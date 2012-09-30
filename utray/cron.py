@@ -8,8 +8,12 @@ import time
 
 
 def setup_syncing_cronjobs():
+    crons = []
     for cron_definition in read_crons_from_config():
-        SyncingCronjob(cron_definition).start()
+        cron = SyncingCronjob(cron_definition)
+        cron.start()
+        crons.append(cron)
+    return crons
 
 
 def read_crons_from_config():
@@ -45,3 +49,6 @@ class SyncingCronjob(Thread):
                 return
 
         app.get().sync()
+
+    def stop(self):
+        self.running = False
