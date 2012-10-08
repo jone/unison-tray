@@ -76,7 +76,8 @@ class TrayMenu(NSObject):
         self.menu.addItem_(menuitem)
 
         menuitem = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_(
-            app.get().status == interfaces.STATUS_DISABLED and 'Enable' or 'Disable',
+            app.get().status == interfaces.STATUS_DISABLED \
+                and 'Enable' or 'Disable',
             'enabledisable:', '')
         self._menu_items['enable_disable'] = menuitem
         self.menu.addItem_(menuitem)
@@ -90,7 +91,8 @@ class TrayMenu(NSObject):
         timer = NSTimer.alloc() \
             .initWithFireDate_interval_target_selector_userInfo_repeats_(
             start_time, 1, self, 'tick:', None, True)
-        NSRunLoop.currentRunLoop().addTimer_forMode_(timer, NSDefaultRunLoopMode)
+        NSRunLoop.currentRunLoop().addTimer_forMode_(
+            timer, NSDefaultRunLoopMode)
         timer.fire()
 
     def status_changed(self, status):
@@ -139,7 +141,8 @@ class TrayMenu(NSObject):
 
     def change_icon(self, name):
         if name == 'syncing':
-            if self._last_icon is not None and self._last_icon.startswith('syncing'):
+            if self._last_icon is not None and \
+                    self._last_icon.startswith('syncing'):
                 return
 
             self.change_icon('syncing1')
