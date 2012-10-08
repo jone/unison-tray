@@ -16,6 +16,10 @@ def sigint_handler(signum, frame):
     signal.signal(signal.SIGINT, signal.default_int_handler)
 
 
+DISABLING_STATE_FILE_PATH = os.path.abspath(os.path.join(
+        os.path.dirname(__file__), '..', 'var', 'disabled'))
+
+
 class Application(object):
 
     def __init__(self, path_to_unison):
@@ -71,17 +75,15 @@ class Application(object):
             thread.stop()
 
     def _persist_disabled(self, disabled):
-        path = os.path.join(os.getcwd(), 'var', 'disabled')
-        file_ = open(path, 'w+')
+        file_ = open(DISABLING_STATE_FILE_PATH, 'w+')
         file_.write(str(disabled))
         file_.close()
 
     def _is_persistent_disabled(self):
-        path = os.path.join(os.getcwd(), 'var', 'disabled')
-        if not os.path.isfile(path):
+        if not os.path.isfile(DISABLING_STATE_FILE_PATH):
             return False
 
-        data = open(path).read().strip().lower()
+        data = open(DISABLING_STATE_FILE_PATH).read().strip().lower()
         return data == 'true'
 
 def run(path_to_unison):
