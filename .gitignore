@@ -3,3 +3,6 @@
 /develop-eggs/
 /parts/
 /utray.egg-info/
+/venv/
+*.pyc
+/eggs/
