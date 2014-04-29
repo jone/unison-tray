@@ -38,10 +38,10 @@ Installation
 
     $ git clone https://github.com/jone/unison-tray.git
     $ cd unison-tray
-    $ virtualenv venv
+    $ virtualenv venv --setuptools
     $ source venv/bin/activate
     $ pip install -r requirements.txt
-    $ /usr/bin/python2.7 bootstrap.py
+    $ python bootstrap.py
     $ bin/buildout
 
 ``pip install`` will install PyObjC_, which may take awhile.
