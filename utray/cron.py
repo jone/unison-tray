@@ -1,34 +1,18 @@
-from ConfigParser import RawConfigParser
 from croniter import croniter
 from datetime import datetime
 from threading import Thread
+from utray.config import CONFIG
 from utray.utils import app
-import os
 import time
 
 
 def setup_syncing_cronjobs():
     crons = []
-    for cron_definition in read_crons_from_config():
+    for cron_definition in CONFIG.sync_crons:
         cron = SyncingCronjob(cron_definition)
         cron.start()
         crons.append(cron)
     return crons
-
-
-def read_crons_from_config():
-    path = os.path.join(os.getcwd(), 'syncer.cfg')
-    config = RawConfigParser()
-    config.read(path)
-
-    if not config.has_section('cron'):
-        return []
-
-    sync_crons = config.get('cron', 'sync').strip().split('\n')
-    if not sync_crons:
-        return []
-    else:
-        return sync_crons
 
 
 class SyncingCronjob(Thread):
