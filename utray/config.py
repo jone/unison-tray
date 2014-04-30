@@ -16,6 +16,9 @@ class Config(object):
     def _read(self):
         self.sync_crons = self._get_multiline(
             'cron', 'sync', [])
+        self.unison_executable = self._get(
+            'unison', 'executable',
+            '/usr/local/bin/unison')
 
     def _get(self, section, option, default):
         if not self.config.has_option(section, option):

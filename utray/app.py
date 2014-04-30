@@ -22,8 +22,7 @@ DISABLING_STATE_FILE_PATH = os.path.abspath(os.path.join(
 
 class Application(object):
 
-    def __init__(self, path_to_unison):
-        self.path_to_unison = path_to_unison
+    def __init__(self):
         app.set(self)
 
         if self._is_persistent_disabled():
@@ -32,7 +31,7 @@ class Application(object):
             self._status = interfaces.STATUS_INACTIVE
 
     def run(self):
-        self._syncer = Syncer(self.path_to_unison)
+        self._syncer = Syncer()
         self._syncer.start()
 
         app = NSApplication.sharedApplication()
@@ -86,6 +85,6 @@ class Application(object):
         data = open(DISABLING_STATE_FILE_PATH).read().strip().lower()
         return data == 'true'
 
-def run(path_to_unison):
+def run():
     signal.signal(signal.SIGINT, sigint_handler)
-    Application(path_to_unison).run()
+    Application().run()
