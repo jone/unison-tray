@@ -24,8 +24,9 @@ Features
 Compatibility
 =============
 
-- Mac OS X (Tested with 10.6 and 10.7).
+- Mac OS X (Tested on 10.9 Mavericks -- for older versions you might want to see the previous revision, which was tested on 10.6 and 10.7).
 - python 2.7 with cocoa bindings, as installed on every compatible Mac OS X.
+- `virtualenv`_.
 - A working and configured `unison`_ installation, preferably
   installed with `homebrew`_.
 
@@ -37,8 +38,13 @@ Installation
 
     $ git clone https://github.com/jone/unison-tray.git
     $ cd unison-tray
+    $ virtualenv venv
+    $ source venv/bin/activate
+    $ pip install -r requirements.txt
     $ /usr/bin/python2.7 bootstrap.py
     $ bin/buildout
+
+``pip install`` will install PyObjC_, which may take awhile.
 
 You may need to change the path to your unison installation in buildout.cfg (a bin/buildout rerun is required).
 
@@ -55,6 +61,9 @@ asks questions.
 Start the tray icon from within the ``unison-tray`` directory with::
 
     $ bin/utray
+
+From the menubar icon, "Sync now" will sync in the background, whereas "Resolve conflicts" will sync in a Terminal window.
+All errors and messages are logged to ``var/utray.log`` in the unison-tray directory.
 
 
 Autostart
@@ -76,3 +85,5 @@ this stuff is worth it, you can buy me a beer in return.
 .. _unison: http://www.cis.upenn.edu/~bcpierce/unison
 .. _homebrew: http://mxcl.github.com/homebrew/
 .. _jone: http://github.com/jone
+.. _PyObjC: https://pythonhosted.org/pyobjc/
+.. _virtualenv: http://www.virtualenv.org
