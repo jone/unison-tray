@@ -38,7 +38,7 @@ Installation
 
     $ git clone https://github.com/jone/unison-tray.git
     $ cd unison-tray
-    $ virtualenv .
+    $ virtualenv . --setuptools
     $ source bin/activate
     $ pip install -r requirements.txt
 
